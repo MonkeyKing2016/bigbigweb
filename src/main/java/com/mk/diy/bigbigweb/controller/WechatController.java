@@ -2,6 +2,9 @@ package com.mk.diy.bigbigweb.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.mk.diy.bigbigweb.constant.WechatConstant;
+import com.mk.diy.bigbigweb.model.request.RequestBase;
+import com.mk.diy.bigbigweb.model.response.ResponseBase;
+import com.mk.diy.bigbigweb.model.response.TextResponse;
 import com.mk.diy.bigbigweb.service.IWechatService;
 import com.mk.diy.bigbigweb.utils.AesException;
 import com.mk.diy.bigbigweb.utils.Dom4jXMLParse;
@@ -11,14 +14,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -62,15 +68,6 @@ public class WechatController {
             nonce = request.getParameter("nonce");// 随机数
             echostr = request.getParameter("echostr");//随机字符串
 
-            logger.info(String.format("signature：%s," +
-                            "timestamp：%s," +
-                            "nonce：%s," +
-                            "echostr：%s,", signature,
-                    timestamp,
-                    nonce,
-                    echostr));
-
-
             crypt = new WXBizMsgCrypt(WechatConstant.Token, WechatConstant.EncodingAESKey,WechatConstant.AppId);
 
             if (isGet) {
@@ -78,7 +75,6 @@ public class WechatController {
                 // 通过检验signature对请求进行校验，若校验成功则原样返回echostr，表示接入成功，否则接入失败
                 result = crypt.access(signature, timestamp, nonce, echostr);
 
-                logger.info("Connect the weixin server is successful.");
             }else{
 
                 result = crypt.decryptMsg(msg_signature, timestamp, nonce, request.getInputStream());
@@ -87,17 +83,35 @@ public class WechatController {
 
                 result = crypt.encryptMsg(result, timestamp, nonce);
 
-                logger.info("The request completed successfully");
-                logger.info(String.format("to weixin server =>[ %s ]<=",result));
             }
         } catch (AesException aes) {
             processAesException(signature, timestamp, nonce, echostr, aes);
         } catch (Exception e) {
-        logger.error(String.format("未知错误！！！.signature:%s,timestamp:%s,nonce:%s,echostr:%s",signature,timestamp,nonce,echostr));
+            logger.error(String.format("未知错误！！！.signature:%s,timestamp:%s,nonce:%s,echostr:%s",signature,timestamp,nonce,echostr));
         } finally {
             response.getWriter().write(result);
             out.close();
         }
+    }
+
+    @RequestMapping(value="/devConverter.do",method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public ResponseBase devConverter(@RequestBody RequestBase requestBase) throws IOException{
+        logger.info(JSON.toJSONString(requestBase));
+        TextResponse resp = new TextResponse();
+        resp.setToUserName(requestBase.getFromUserName());
+        resp.setFromUserName(requestBase.getToUserName());
+        resp.setMsgType(WechatConstant.RESP_MSG_TYPE_TEXT);
+        resp.setCreateTime(new Date().getTime());
+        resp.setContent("感谢您的评论，该订阅号正在开发中...");
+        logger.info(JSON.toJSONString(resp));
+        return resp;
+    }
+
+    @RequestMapping(value="/dev.do",method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public void dev(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        logger.info("request getContentType :%s",request.getContentType());
     }
 
     private void processAesException(String signature, String timestamp, String nonce, String echostr, AesException aes) {

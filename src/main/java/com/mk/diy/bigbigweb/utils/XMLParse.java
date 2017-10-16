@@ -16,6 +16,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import com.mk.diy.bigbigweb.converter.CDATAConvert;
 import com.mk.diy.bigbigweb.model.response.ResponseBase;
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.StaxDriver;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -32,8 +33,8 @@ public class XMLParse {
     private static XStream xstream;
 
     static {
-        xstream = new XStream();
-        xstream.registerConverter(new CDATAConvert());
+        xstream = new XStream(new StaxDriver());
+        xstream.autodetectAnnotations(true);
     }
 
 	/**
@@ -132,9 +133,12 @@ public class XMLParse {
 
 	}
 
-	public static String generateXmlString(ResponseBase responseBase,Class<? extends ResponseBase> c){
-	    xstream.alias("xml",c);
+	public static String generateXmlString(ResponseBase responseBase){
         return StringEscapeUtils.unescapeXml(xstream.toXML(responseBase));
+    }
+
+    public static Object generateObject(InputStream inputStream){
+        return xstream.fromXML(inputStream);
     }
 
 }

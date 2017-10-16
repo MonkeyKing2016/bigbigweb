@@ -7,14 +7,22 @@ import com.mk.diy.bigbigweb.model.UserModel;
 import com.mk.diy.bigbigweb.model.request.TextMsg;
 import com.mk.diy.bigbigweb.model.response.TextResponse;
 import com.mk.diy.bigbigweb.test.base.TestBaseConfig;
+import com.mk.diy.bigbigweb.test.model.Student;
 import com.mk.diy.bigbigweb.test.model.TestBase;
 import com.mk.diy.bigbigweb.test.model.TestCat;
+import com.mk.diy.bigbigweb.test.model.TestXmlModel;
 import com.mk.diy.bigbigweb.test.util.TestXstreamUtil;
 import com.mk.diy.bigbigweb.utils.AesException;
 import com.mk.diy.bigbigweb.utils.WXBizMsgCrypt;
 import com.mk.diy.bigbigweb.utils.XMLParse;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.StaxDriver;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.dom4j.DocumentException;
+import org.exolab.castor.xml.MarshalException;
+import org.exolab.castor.xml.Marshaller;
+import org.exolab.castor.xml.Unmarshaller;
+import org.exolab.castor.xml.ValidationException;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +32,8 @@ import org.xml.sax.SAXException;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.Date;
 import java.util.Map;
 
@@ -58,9 +68,9 @@ public class TestUserDaoImpl extends TestBaseConfig{
         String nonce = "2067810837";
 
         WXBizMsgCrypt crypt = new WXBizMsgCrypt(WechatConstant.Token, WechatConstant.EncodingAESKey,WechatConstant.AppId);
-        String decryptMsg = crypt.decryptMsg(signature, timeStamp, nonce, encrypt);
-        System.out.println(decryptMsg);
 
+        String decrypt = crypt.decrypt(encrypt);
+        System.out.println(decrypt);
     }
     @Test
     public void testBase(){
@@ -122,8 +132,28 @@ public class TestUserDaoImpl extends TestBaseConfig{
         response.setFromUserName("最帅没有之一");
         response.setToUserName("wangshuai");
         response.setMsgType(WechatConstant.RESP_MSG_TYPE_TEXT);
-        String s = XMLParse.generateXmlString(response, TextResponse.class);
+        String s = XMLParse.generateXmlString(response);
         System.out.println(s);
+
+
+    }
+
+    @Test
+    public void testCastor() throws MarshalException, ValidationException {
+        String xml = "<xml><ToUserName><![CDATA[gh_7f12c64e476e]]></ToUserName>\n" +
+                "<FromUserName><![CDATA[okQF5jgnS7mKOLNSt9hlsMf4PYOQ]]></FromUserName>\n" +
+                "<CreateTime>1507985595</CreateTime>\n" +
+                "<MsgType><![CDATA[text]]></MsgType>\n" +
+                "<Content><![CDATA[我日]]></Content>\n" +
+                "<MsgId>6476748813790459240</MsgId>\n" +
+                "</xml>";
+        XStream xStream = new XStream(new StaxDriver());
+        xStream.autodetectAnnotations(true);
+        Student student = new Student();
+        student.setStudentName("sianx");
+        student.setType(10086);
+        String toXML = xStream.toXML(student);
+        System.out.println(toXML);
     }
 
 

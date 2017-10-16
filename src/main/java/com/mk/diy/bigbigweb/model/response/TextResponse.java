@@ -11,14 +11,16 @@ import com.thoughtworks.xstream.annotations.XStreamConverter;
 @XStreamAlias("xml")
 public class TextResponse extends ResponseBase{
     private static final long serialVersionUID = -3019293689932660162L;
+
+    @XStreamAlias("Content")
     @XStreamConverter(CDATAConvert.class)
-    private String Content;
+    private String content;
 
     public String getContent() {
-        return Content;
+        return content;
     }
 
     public void setContent(String content) {
-        this.Content = content;
+        this.content = content;
     }
 }

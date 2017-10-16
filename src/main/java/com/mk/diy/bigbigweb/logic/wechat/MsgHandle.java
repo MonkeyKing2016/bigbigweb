@@ -109,7 +109,7 @@ public class MsgHandle {
         resp.setMsgType(WechatConstant.RESP_MSG_TYPE_TEXT);
         resp.setCreateTime(new Date().getTime());
         resp.setContent("感谢您的评论，该订阅号正在开发中...");
-        return XMLParse.generateXmlString(resp, TextResponse.class);
+        return XMLParse.generateXmlString(resp);
     }
     private String defualtResp(String toUserName, String formUserName, String content){
         TextResponse resp = new TextResponse();
@@ -118,6 +118,6 @@ public class MsgHandle {
         resp.setMsgType(WechatConstant.RESP_MSG_TYPE_TEXT);
         resp.setCreateTime(new Date().getTime());
         resp.setContent(content);
-        return XMLParse.generateXmlString(resp, TextResponse.class);
+        return XMLParse.generateXmlString(resp);
     }
 }

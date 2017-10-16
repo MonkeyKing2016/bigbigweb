@@ -1,6 +1,7 @@
 package com.mk.diy.bigbigweb.model.response;
 
 import com.mk.diy.bigbigweb.converter.CDATAConvert;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamConverter;
 
 import java.io.Serializable;
@@ -13,28 +14,42 @@ import java.io.Serializable;
  */
 public abstract class ResponseBase implements Serializable{
     private static final long serialVersionUID = 3259450802639153100L;
+    @XStreamAlias("ToUserName")
     @XStreamConverter(CDATAConvert.class)
-    protected String ToUserName;
+    protected String toUserName;
+
+    @XStreamAlias("FromUserName")
     @XStreamConverter(CDATAConvert.class)
-    protected String FromUserName;
+    protected String fromUserName;
+
     protected Long CreateTime;
+
+    @XStreamAlias("MsgType")
     @XStreamConverter(CDATAConvert.class)
-    protected String MsgType;
+    protected String msgType;
 
     public String getToUserName() {
-        return ToUserName;
+        return toUserName;
     }
 
     public void setToUserName(String toUserName) {
-        ToUserName = toUserName;
+        this.toUserName = toUserName;
     }
 
     public String getFromUserName() {
-        return FromUserName;
+        return fromUserName;
     }
 
     public void setFromUserName(String fromUserName) {
-        FromUserName = fromUserName;
+        this.fromUserName = fromUserName;
+    }
+
+    public String getMsgType() {
+        return msgType;
+    }
+
+    public void setMsgType(String msgType) {
+        this.msgType = msgType;
     }
 
     public Long getCreateTime() {
@@ -45,11 +60,4 @@ public abstract class ResponseBase implements Serializable{
         CreateTime = createTime;
     }
 
-    public String getMsgType() {
-        return MsgType;
-    }
-
-    public void setMsgType(String msgType) {
-        MsgType = msgType;
-    }
 }

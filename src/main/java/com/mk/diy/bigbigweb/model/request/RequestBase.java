@@ -11,7 +11,7 @@ import java.io.Serializable;
  */
 public abstract class RequestBase implements Serializable{
     private static final long serialVersionUID = 2052557372100794750L;
-
+    
     protected String toUserName;
     protected String fromUserName;
     protected Long createTime;
