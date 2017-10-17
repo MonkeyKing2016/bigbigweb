@@ -10,9 +10,11 @@ import com.mk.diy.bigbigweb.utils.AesException;
 import com.mk.diy.bigbigweb.utils.Dom4jXMLParse;
 import com.mk.diy.bigbigweb.utils.WXBizMsgCrypt;
 import com.mk.diy.bigbigweb.utils.XMLParse;
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
@@ -94,9 +97,10 @@ public class WechatController {
         }
     }
 
-    @RequestMapping(value="/devConverter.do",method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value="/devConverter.do",method = {RequestMethod.GET, RequestMethod.POST}, consumes = {MediaType.APPLICATION_XML_VALUE,MediaType.TEXT_XML_VALUE},produces = {MediaType.TEXT_XML_VALUE} )
     @ResponseBody
     public ResponseBase devConverter(@RequestBody RequestBase requestBase) throws IOException{
+        logger.info("test01");
         logger.info(JSON.toJSONString(requestBase));
         TextResponse resp = new TextResponse();
         resp.setToUserName(requestBase.getFromUserName());
@@ -111,7 +115,20 @@ public class WechatController {
     @RequestMapping(value="/dev.do",method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public void dev(HttpServletRequest request, HttpServletResponse response) throws IOException{
-        logger.info("request getContentType :%s",request.getContentType());
+        logger.info("test01");
+        logger.info("request getContentType :{}",request.getContentType());
+        logger.info(String.format("request getContentType : %s",request.getContentType()));
+        byte[] bytes = new byte[1024];
+        ServletInputStream inputStream = request.getInputStream();
+        int rc = 0;
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        while ((rc = inputStream.read(bytes, 0, 100)) > 0) {
+            outputStream.write(bytes, 0, rc);
+        }
+        bytes = outputStream.toByteArray();
+        String result = new String(Base64.encodeBase64(bytes));
+        logger.info("result : {}",result);
+        logger.info(String.format("result : %s",result));
     }
 
     private void processAesException(String signature, String timestamp, String nonce, String echostr, AesException aes) {

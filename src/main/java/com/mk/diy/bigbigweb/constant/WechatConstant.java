@@ -7,10 +7,10 @@ package com.mk.diy.bigbigweb.constant;
  * @create 2017-10-14 16:02
  */
 public class WechatConstant {
-    public static final String AppId = "";
-    public static final String Appsecret = "";
-    public static final String Token = "";
-    public static final String EncodingAESKey = "";
+    public static final String AppId = "wxbc39091dcba6bf22";
+    public static final String Appsecret = "99b15def1fb9ee752765e2869c08a14f";
+    public static final String Token = "b8ed1ac5d6a52839489774e2676e3e27";
+    public static final String EncodingAESKey = "3Db9zs7j5Lz4uEY51k8gFB9kWBKeErEJYc8SaVA1bCJ";
 
 
     /**

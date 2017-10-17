@@ -17,12 +17,7 @@ import com.mk.diy.bigbigweb.utils.WXBizMsgCrypt;
 import com.mk.diy.bigbigweb.utils.XMLParse;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.dom4j.DocumentException;
-import org.exolab.castor.xml.MarshalException;
-import org.exolab.castor.xml.Marshaller;
-import org.exolab.castor.xml.Unmarshaller;
-import org.exolab.castor.xml.ValidationException;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,10 +25,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.xml.sax.SAXException;
 
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.ValidationException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.util.Date;
 import java.util.Map;
 
@@ -139,7 +133,7 @@ public class TestUserDaoImpl extends TestBaseConfig{
     }
 
     @Test
-    public void testCastor() throws MarshalException, ValidationException {
+    public void testCastor() throws ValidationException {
         String xml = "<xml><ToUserName><![CDATA[gh_7f12c64e476e]]></ToUserName>\n" +
                 "<FromUserName><![CDATA[okQF5jgnS7mKOLNSt9hlsMf4PYOQ]]></FromUserName>\n" +
                 "<CreateTime>1507985595</CreateTime>\n" +
