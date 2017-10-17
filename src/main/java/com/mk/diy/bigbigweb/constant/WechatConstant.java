@@ -12,7 +12,7 @@ public class WechatConstant {
     public static final String Token = "b8ed1ac5d6a52839489774e2676e3e27";
     public static final String EncodingAESKey = "3Db9zs7j5Lz4uEY51k8gFB9kWBKeErEJYc8SaVA1bCJ";
 
-
+    public static String accessToken = "";
     /**
      * 返回消息类型：图片 1
      */

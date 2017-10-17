@@ -3,6 +3,7 @@ package com.mk.diy.bigbigweb.logic.wechat;
 import com.alibaba.fastjson.JSON;
 import com.mk.diy.bigbigweb.constant.WechatConstant;
 import com.mk.diy.bigbigweb.dao.IUserDao;
+import com.mk.diy.bigbigweb.enums.MsgEnum;
 import com.mk.diy.bigbigweb.model.WCUserModel;
 import com.mk.diy.bigbigweb.model.request.*;
 import com.mk.diy.bigbigweb.model.response.TextResponse;
@@ -43,27 +44,27 @@ public class MsgHandle {
     }
 
     public String process(ImageMsg imageMsg) {
-        return defualtResp(imageMsg.getFromUserName(),imageMsg.getToUserName());
+        return defualtRespByType(imageMsg.getFromUserName(),imageMsg.getToUserName(),imageMsg.getMsgType());
     }
 
     public String process(LinkMsg linkMsg) {
-        return defualtResp(linkMsg.getFromUserName(),linkMsg.getToUserName());
+        return defualtRespByType(linkMsg.getFromUserName(),linkMsg.getToUserName(),linkMsg.getMsgType());
     }
 
     public String process(LocationMsg locationMsg) {
-        return defualtResp(locationMsg.getFromUserName(),locationMsg.getToUserName());
+        return defualtRespByType(locationMsg.getFromUserName(),locationMsg.getToUserName(),locationMsg.getMsgType());
     }
 
     public String process(VideoMsg videoMsg) {
-        return defualtResp(videoMsg.getFromUserName(),videoMsg.getToUserName());
+        return defualtRespByType(videoMsg.getFromUserName(),videoMsg.getToUserName(),videoMsg.getMsgType());
     }
 
     public String process(VoiceMsg voiceMsg) {
-        return defualtResp(voiceMsg.getFromUserName(),voiceMsg.getToUserName());
+        return defualtRespByType(voiceMsg.getFromUserName(),voiceMsg.getToUserName(),voiceMsg.getMsgType());
     }
 
     public String process(LocationEvent locationEvent) {
-        return defualtResp(locationEvent.getFromUserName(),locationEvent.getToUserName());
+        return defualtRespByType(locationEvent.getFromUserName(),locationEvent.getToUserName(),locationEvent.getMsgType());
     }
 
     public String processSubscribe(SubscribeEvent subscribeEvent) {
@@ -118,6 +119,15 @@ public class MsgHandle {
         resp.setMsgType(WechatConstant.RESP_MSG_TYPE_TEXT);
         resp.setCreateTime(new Date().getTime());
         resp.setContent(content);
+        return XMLParse.generateXmlString(resp);
+    }
+    private String defualtRespByType(String toUserName, String formUserName, String type){
+        TextResponse resp = new TextResponse();
+        resp.setToUserName(toUserName);
+        resp.setFromUserName(formUserName);
+        resp.setMsgType(WechatConstant.RESP_MSG_TYPE_TEXT);
+        resp.setCreateTime(new Date().getTime());
+        resp.setContent(String.format("接收到[ %s ]类型的消息.", MsgEnum.getCode(type)));
         return XMLParse.generateXmlString(resp);
     }
 }
