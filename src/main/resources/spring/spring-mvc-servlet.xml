@@ -16,6 +16,8 @@
         </mvc:message-converters>
     </mvc:annotation-driven>
 
+    <bean id="wxCryptHandle" class="com.mk.diy.bigbigweb.logic.wechat.WXCryptHandle"></bean>
+
     <bean id="xStreamHttpMessageConvert"
           class="com.mk.diy.bigbigweb.converter.XStreamHttpMessageConvert">
         <property name="supportedMediaTypes">

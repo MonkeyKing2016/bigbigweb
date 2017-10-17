@@ -13,13 +13,17 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
+import com.alibaba.fastjson.JSON;
 import com.mk.diy.bigbigweb.converter.CDATAConvert;
+import com.mk.diy.bigbigweb.model.WechatRequestModel;
 import com.mk.diy.bigbigweb.model.response.ResponseBase;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
@@ -116,6 +120,23 @@ public class XMLParse {
         }
     }
 
+    /**
+     * 提取出微信请求数据包
+     * @param ins postdata
+     * @return 提取出的加密消息字符串
+     * @throws AesException
+     */
+    public static WechatRequestModel extractToModel(InputStream ins) throws AesException     {
+        Object[] result = extract(ins);
+
+        WechatRequestModel wechatRequestModel = new WechatRequestModel();
+
+        wechatRequestModel.setPostData(result[1].toString());
+        wechatRequestModel.setToUserName(result[2].toString());
+
+        return wechatRequestModel;
+    }
+
 	/**
 	 * 生成xml消息
 	 * @param encrypt 加密后的消息密文
@@ -137,8 +158,13 @@ public class XMLParse {
         return StringEscapeUtils.unescapeXml(xstream.toXML(responseBase));
     }
 
-    public static Object generateObject(InputStream inputStream){
-        return xstream.fromXML(inputStream);
+    public static String generateXmlString(Object responseBase){
+        return StringEscapeUtils.unescapeXml(xstream.toXML(responseBase));
+    }
+
+    public static Object generateObject(InputStream inputStream,Class<WechatRequestModel> c) throws IllegalAccessException, InstantiationException {
+        WechatRequestModel wechatRequestModel = c.newInstance();
+        return xstream.fromXML(inputStream,wechatRequestModel);
     }
 
 }

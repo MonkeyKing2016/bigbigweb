@@ -3,14 +3,16 @@ package com.mk.diy.bigbigweb.test.dao.impl;
 import com.alibaba.fastjson.JSON;
 import com.mk.diy.bigbigweb.constant.WechatConstant;
 import com.mk.diy.bigbigweb.dao.IUserDao;
-import com.mk.diy.bigbigweb.model.UserModel;
+import com.mk.diy.bigbigweb.model.WechatEncrypt;
+import com.mk.diy.bigbigweb.model.WechatRequestModel;
+import com.mk.diy.bigbigweb.model.WechatResponseModel;
 import com.mk.diy.bigbigweb.model.request.TextMsg;
+import com.mk.diy.bigbigweb.model.response.ResponseBase;
 import com.mk.diy.bigbigweb.model.response.TextResponse;
 import com.mk.diy.bigbigweb.test.base.TestBaseConfig;
 import com.mk.diy.bigbigweb.test.model.Student;
 import com.mk.diy.bigbigweb.test.model.TestBase;
 import com.mk.diy.bigbigweb.test.model.TestCat;
-import com.mk.diy.bigbigweb.test.model.TestXmlModel;
 import com.mk.diy.bigbigweb.test.util.TestXstreamUtil;
 import com.mk.diy.bigbigweb.utils.AesException;
 import com.mk.diy.bigbigweb.utils.WXBizMsgCrypt;
@@ -23,11 +25,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.xml.sax.SAXException;
-
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.ValidationException;
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Base64;
 import java.util.Date;
 import java.util.Map;
 
@@ -133,7 +137,7 @@ public class TestUserDaoImpl extends TestBaseConfig{
     }
 
     @Test
-    public void testCastor() throws ValidationException {
+    public void testCastor() throws ValidationException, AesException {
         String xml = "<xml><ToUserName><![CDATA[gh_7f12c64e476e]]></ToUserName>\n" +
                 "<FromUserName><![CDATA[okQF5jgnS7mKOLNSt9hlsMf4PYOQ]]></FromUserName>\n" +
                 "<CreateTime>1507985595</CreateTime>\n" +
@@ -141,14 +145,51 @@ public class TestUserDaoImpl extends TestBaseConfig{
                 "<Content><![CDATA[我日]]></Content>\n" +
                 "<MsgId>6476748813790459240</MsgId>\n" +
                 "</xml>";
-        XStream xStream = new XStream(new StaxDriver());
+
+        String base64str = "PHhtbD4KICAgIDxUb1VzZXJOYW1lPjwhW0NEQVRBW2doXzdmMTJjNjRlNDc2ZV1dPjwvVG9Vc2VyTmFtZT4KICAgIDxFbmNyeXB0PjwhW0NEQVRBW2pPNG1xQkt6RCtyVEdYQkdhVkczZnBzbXVma3UxN0tXNGRuUUZaMWVaTno3MTRkdFY2NjkvWFh6c056OWxpQS9JOVRYaGlTQ0s3Vk5oWU5KcjUvbWFEbnliMThRK1E3a3piRWQ0Y00xb01tNGw0Zk5HNTRTL2ttTmtFM1hHemszODdvOWU1RmsveVo1THdaWHIvZnp1WVBqajhHNVFXSUZSTGYwbmFTU1VYMFI1UTM4QThqRS9rTDFUNnRNZHJSSXJzWTkwOXdYL0VERXZWSGJReVo0T0ZoVWRGNlZmRVkzcXZvSDk3cWd2enlER1RmYjdOcUloR3FCT2NEY1ZuOWJmRC93bWwwaGl6a1kyS3FzTFJzbzUwY1l3MHlzMTlGWEp6Rnl0ZThQYXUwM05WRS9JbHUrV0NtL2tRSExTSDF5WGtSWHFhSjVVYUdxYmlYRGVqMU4zcVlxb0dQdTRSWkVCUjJRN2pIZG10YmpDSHZaU3VIRytoNHZvZ1hjUkVzajVRbzNSWnZLTklUL25nWnUydTNhQ2sxcVdkWGZkQkdsQ0ErZklOSFNTOGt4d0dOQWZQZmhxWEZvbFpMNllwaGlxMllFYnVBeGcrMDFQTHBzTTJmK0hkd0J5TUNoVExNSFVlM2tNWG9pM0NBV2pOVndFK2N1bUhWeHZiRmVZNlZ3XV0+PC9FbmNyeXB0Pgo8L3htbD4K";
+        byte[] bytes = Base64.getDecoder().decode(base64str);
+        InputStream inputStream = new ByteArrayInputStream(bytes);
+        XStream xStream = new XStream();
+        xStream.alias("xml",WechatRequestModel.class);
         xStream.autodetectAnnotations(true);
-        Student student = new Student();
-        student.setStudentName("sianx");
-        student.setType(10086);
-        String toXML = xStream.toXML(student);
-        System.out.println(toXML);
+        WechatRequestModel fromXML = (WechatRequestModel)xStream.fromXML(inputStream);
+        System.out.println(JSON.toJSONString(fromXML));
+
+        TextResponse resp = new TextResponse();
+        resp.setToUserName("okQF5jgnS7mKOLNSt9hlsMf4PYOQ");
+        resp.setFromUserName("gh_7f12c64e476e");
+        resp.setMsgType(WechatConstant.RESP_MSG_TYPE_TEXT);
+        resp.setCreateTime(new Date().getTime());
+        resp.setContent("感谢您的评论，该订阅号正在开发中...");
+
+        Object o = resp;
+
+        String xmlString = XMLParse.generateXmlString(o);
+
+        System.out.println(xmlString);
+
+//        XStream xStream = new XStream(new StaxDriver());
+//        xStream.autodetectAnnotations(true);
+//        Student student = new Student();
+//        student.setStudentName("sianx");
+//        student.setType(10086);
+//        String toXML = xStream.toXML(student);
+//        System.out.println(toXML);
     }
 
+    @Test
+    public void testModel(){
+        XStream xStream = new XStream();
+        xStream.autodetectAnnotations(true);
+        WechatResponseModel wrm = new WechatResponseModel();
+        WechatEncrypt encrypt = new WechatEncrypt();
+        encrypt.setHehe("hehe");
+        wrm.setEncrypt("hehe");
+        wrm.setTimeStamp("timestamp");
+        wrm.setNonce("setNonce");
+        wrm.setMsgSignature("setMsgSignature");
+        String toXML = xStream.toXML(wrm);
+        System.out.println(toXML);
+    }
 
 }

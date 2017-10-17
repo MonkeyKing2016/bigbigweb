@@ -23,6 +23,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * 提供接收和推送给公众平台消息的加解密接口(UTF8编码的字符串).
@@ -215,7 +216,7 @@ public class WXBizMsgCrypt {
 		String encrypt = encrypt(getRandomStr(), replyMsg);
 
 		// 生成安全签名
-		if (timeStamp == "") {
+		if (StringUtils.isBlank(timeStamp)) {
 			timeStamp = Long.toString(System.currentTimeMillis());
 		}
 
@@ -253,6 +254,26 @@ public class WXBizMsgCrypt {
         return result;
     }
 
+    /**
+     * 检验消息的真实性，并且获取解密后的明文.
+     * <ol>
+     * 	<li>利用收到的密文生成安全签名，进行签名验证</li>
+     * 	<li>若验证通过，则提取xml中的加密消息</li>
+     * 	<li>对消息进行解密</li>
+     * </ol>
+     *
+     * @param msgSignature 签名串，对应URL参数的msg_signature
+     * @param timeStamp 时间戳，对应URL参数的timestamp
+     * @param nonce 随机串，对应URL参数的nonce
+     * @param postData 密文，对应POST请求的数据
+     *
+     * @return 解密后的原文
+     * @throws AesException 执行失败，请查看该异常的错误码和具体的错误信息
+     */
+    public String decryptMsg(String msgSignature, String timeStamp, String nonce, String postData) throws AesException {
+        return getString(msgSignature, SHA1.getSHA1(token, timeStamp, nonce, postData), postData);
+    }
+
     private String getString(String msgSignature, String sha1, Object o) throws AesException {
         // 验证安全签名
         String signature = sha1;
@@ -267,33 +288,6 @@ public class WXBizMsgCrypt {
         // 解密
         return decrypt(o.toString());
     }
-
-    /**
-	 * 检验消息的真实性，并且获取解密后的明文.
-	 * <ol>
-	 * 	<li>利用收到的密文生成安全签名，进行签名验证</li>
-	 * 	<li>若验证通过，则提取xml中的加密消息</li>
-	 * 	<li>对消息进行解密</li>
-	 * </ol>
-	 * 
-	 * @param msgSignature 签名串，对应URL参数的msg_signature
-	 * @param timeStamp 时间戳，对应URL参数的timestamp
-	 * @param nonce 随机串，对应URL参数的nonce
-	 * @param postData 密文，对应POST请求的数据
-	 * 
-	 * @return 解密后的原文
-	 * @throws AesException 执行失败，请查看该异常的错误码和具体的错误信息
-	 */
-	public String decryptMsg(String msgSignature, String timeStamp, String nonce, String postData)
-			throws AesException {
-
-		// 密钥，公众账号的app secret
-		// 提取密文
-		Object[] encrypt = XMLParse.extract(postData);
-		// 验证安全签名
-        String result = getString(msgSignature, SHA1.getSHA1(token, timeStamp, nonce, encrypt[1].toString()), encrypt[1]);
-		return result;
-	}
 
 	/**
 	 * 验证URL

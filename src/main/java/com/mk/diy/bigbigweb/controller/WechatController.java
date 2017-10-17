@@ -2,14 +2,11 @@ package com.mk.diy.bigbigweb.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.mk.diy.bigbigweb.constant.WechatConstant;
-import com.mk.diy.bigbigweb.model.request.RequestBase;
-import com.mk.diy.bigbigweb.model.response.ResponseBase;
-import com.mk.diy.bigbigweb.model.response.TextResponse;
+import com.mk.diy.bigbigweb.model.WechatRequestModel;
+import com.mk.diy.bigbigweb.model.WechatResponseModel;
 import com.mk.diy.bigbigweb.service.IWechatService;
 import com.mk.diy.bigbigweb.utils.AesException;
-import com.mk.diy.bigbigweb.utils.Dom4jXMLParse;
 import com.mk.diy.bigbigweb.utils.WXBizMsgCrypt;
-import com.mk.diy.bigbigweb.utils.XMLParse;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,8 +24,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Date;
-import java.util.Map;
 
 /**
  * 微信交互controller
@@ -99,23 +94,25 @@ public class WechatController {
 
     @RequestMapping(value="/devConverter.do",method = {RequestMethod.GET, RequestMethod.POST}, consumes = {MediaType.APPLICATION_XML_VALUE,MediaType.TEXT_XML_VALUE},produces = {MediaType.TEXT_XML_VALUE} )
     @ResponseBody
-    public ResponseBase devConverter(@RequestBody RequestBase requestBase) throws IOException{
-        logger.info("test01");
-        logger.info(JSON.toJSONString(requestBase));
-        TextResponse resp = new TextResponse();
-        resp.setToUserName(requestBase.getFromUserName());
-        resp.setFromUserName(requestBase.getToUserName());
-        resp.setMsgType(WechatConstant.RESP_MSG_TYPE_TEXT);
-        resp.setCreateTime(new Date().getTime());
-        resp.setContent("感谢您的评论，该订阅号正在开发中...");
-        logger.info(JSON.toJSONString(resp));
-        return resp;
+    public String devConverter(@RequestBody WechatRequestModel wechatRequestModel,HttpServletRequest request) throws IOException, AesException {
+        logger.info(JSON.toJSONString(wechatRequestModel));
+        WXBizMsgCrypt crypt = new WXBizMsgCrypt(WechatConstant.Token, WechatConstant.EncodingAESKey,WechatConstant.AppId);
+        String msg_signature = request.getParameter("msg_signature");// 微信加密签名
+        String timestamp = request.getParameter("timestamp");// 时间戳
+        String nonce = request.getParameter("nonce");// 随机数
+        String decryptMsg = crypt.decryptMsg(msg_signature, timestamp, nonce, wechatRequestModel.getPostData());
+
+        decryptMsg = wechatService.processRequest(decryptMsg);
+
+        decryptMsg = crypt.encryptMsg(decryptMsg, timestamp, nonce);
+
+        logger.info(decryptMsg);
+        return decryptMsg;
     }
 
     @RequestMapping(value="/dev.do",method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public void dev(HttpServletRequest request, HttpServletResponse response) throws IOException{
-        logger.info("test01");
         logger.info("request getContentType :{}",request.getContentType());
         logger.info(String.format("request getContentType : %s",request.getContentType()));
         byte[] bytes = new byte[1024];
