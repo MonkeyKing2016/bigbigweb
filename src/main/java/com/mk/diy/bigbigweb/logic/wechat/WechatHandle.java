@@ -89,6 +89,9 @@ public class WechatHandle {
             case WechatConstant.EVENT_TYPE_LOCATION:
                 result = msgHandle.process(JSON.parseObject(JSON.toJSONString(map), LocationEvent.class));
                 break;
+            case WechatConstant.EVENT_TYPE_LOCATION_SELECT:
+                result = msgHandle.process(JSON.parseObject(JSON.toJSONString(map), LocationEvent.class));
+                break;
             case WechatConstant.EVENT_TYPE_CLICK:
                 result = msgHandle.processClick(JSON.parseObject(JSON.toJSONString(map), MenuEvent.class));
                 break;

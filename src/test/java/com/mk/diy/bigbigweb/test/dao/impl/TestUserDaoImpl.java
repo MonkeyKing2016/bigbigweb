@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.mk.diy.bigbigweb.constant.WechatConstant;
 import com.mk.diy.bigbigweb.dao.IUserDao;
 import com.mk.diy.bigbigweb.model.WechatEncrypt;
-import com.mk.diy.bigbigweb.model.WechatRequestModel;
 import com.mk.diy.bigbigweb.model.WechatResponseModel;
 import com.mk.diy.bigbigweb.model.request.TextMsg;
 import com.mk.diy.bigbigweb.model.response.TextResponse;
@@ -16,7 +15,10 @@ import com.mk.diy.bigbigweb.utils.AesException;
 import com.mk.diy.bigbigweb.utils.WXBizMsgCrypt;
 import com.mk.diy.bigbigweb.utils.XMLParse;
 import com.thoughtworks.xstream.XStream;
+import org.dom4j.Document;
 import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +33,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Base64;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -143,16 +146,6 @@ public class TestUserDaoImpl extends TestBaseConfig{
                 "<Content><![CDATA[我日]]></Content>\n" +
                 "<MsgId>6476748813790459240</MsgId>\n" +
                 "</xml>";
-
-        String base64str = "PHhtbD4KICAgIDxUb1VzZXJOYW1lPjwhW0NEQVRBW2doXzdmMTJjNjRlNDc2ZV1dPjwvVG9Vc2VyTmFtZT4KICAgIDxFbmNyeXB0PjwhW0NEQVRBW2pPNG1xQkt6RCtyVEdYQkdhVkczZnBzbXVma3UxN0tXNGRuUUZaMWVaTno3MTRkdFY2NjkvWFh6c056OWxpQS9JOVRYaGlTQ0s3Vk5oWU5KcjUvbWFEbnliMThRK1E3a3piRWQ0Y00xb01tNGw0Zk5HNTRTL2ttTmtFM1hHemszODdvOWU1RmsveVo1THdaWHIvZnp1WVBqajhHNVFXSUZSTGYwbmFTU1VYMFI1UTM4QThqRS9rTDFUNnRNZHJSSXJzWTkwOXdYL0VERXZWSGJReVo0T0ZoVWRGNlZmRVkzcXZvSDk3cWd2enlER1RmYjdOcUloR3FCT2NEY1ZuOWJmRC93bWwwaGl6a1kyS3FzTFJzbzUwY1l3MHlzMTlGWEp6Rnl0ZThQYXUwM05WRS9JbHUrV0NtL2tRSExTSDF5WGtSWHFhSjVVYUdxYmlYRGVqMU4zcVlxb0dQdTRSWkVCUjJRN2pIZG10YmpDSHZaU3VIRytoNHZvZ1hjUkVzajVRbzNSWnZLTklUL25nWnUydTNhQ2sxcVdkWGZkQkdsQ0ErZklOSFNTOGt4d0dOQWZQZmhxWEZvbFpMNllwaGlxMllFYnVBeGcrMDFQTHBzTTJmK0hkd0J5TUNoVExNSFVlM2tNWG9pM0NBV2pOVndFK2N1bUhWeHZiRmVZNlZ3XV0+PC9FbmNyeXB0Pgo8L3htbD4K";
-        byte[] bytes = Base64.getDecoder().decode(base64str);
-        InputStream inputStream = new ByteArrayInputStream(bytes);
-        XStream xStream = new XStream();
-        xStream.alias("xml",WechatRequestModel.class);
-        xStream.autodetectAnnotations(true);
-        WechatRequestModel fromXML = (WechatRequestModel)xStream.fromXML(inputStream);
-        System.out.println(JSON.toJSONString(fromXML));
-
         TextResponse resp = new TextResponse();
         resp.setToUserName("okQF5jgnS7mKOLNSt9hlsMf4PYOQ");
         resp.setFromUserName("gh_7f12c64e476e");
@@ -173,6 +166,24 @@ public class TestUserDaoImpl extends TestBaseConfig{
 //        student.setType(10086);
 //        String toXML = xStream.toXML(student);
 //        System.out.println(toXML);
+    }
+
+    @Test
+    public void testInput() throws SAXException, DocumentException {
+        String base64str = "PHhtbD48VG9Vc2VyTmFtZT48IVtDREFUQVtnaF9kMzQ3YWVjNmU1MmJdXT48L1RvVXNlck5hbWU+CjxGcm9tVXNlck5hbWU+PCFbQ0RBVEFbb3dmTncwOXVYcDlQU0JtNmFwY2Vvb2NMd21uc11dPjwvRnJvbVVzZXJOYW1lPgo8Q3JlYXRlVGltZT4xNTA4NDgwNzMwPC9DcmVhdGVUaW1lPgo8TXNnVHlwZT48IVtDREFUQVt0ZXh0XV0+PC9Nc2dUeXBlPgo8Q29udGVudD48IVtDREFUQVvmiJHmm7nvvJ9dXT48L0NvbnRlbnQ+CjxNc2dJZD42NDc4ODc1NDAyNDE3NzU5NDA1PC9Nc2dJZD4KPC94bWw+";
+        byte[] bytes = Base64.getDecoder().decode(base64str);
+        InputStream inputStream = new ByteArrayInputStream(bytes);
+
+        SAXReader reader = new SAXReader();
+        Document document = reader.read(inputStream);
+        String xml = document.asXML();
+        System.out.println(xml);
+        Element element = document.getRootElement();
+//        XStream xStream = new XStream();
+//        xStream.alias("xml",WechatRequestModel.class);
+//        xStream.autodetectAnnotations(true);
+//        WechatRequestModel fromXML = (WechatRequestModel)xStream.fromXML(inputStream);
+//        System.out.println(JSON.toJSONString(fromXML));
     }
 
     @Test

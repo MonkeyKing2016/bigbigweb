@@ -19,6 +19,7 @@ public enum MsgEnum {
     unsubscribe("unsubscribe","取消关注"),
     SCAN("SCAN","事件推送"),
     LOCATION_EVENT("LOCATION","上报地理位置"),
+    LOCATION_SELECT("location_select","上报地理位置"),
     CLICK("CLICK","菜单点击"),
     VIEW("VIEW","菜单显示");
     private String code;

@@ -132,6 +132,11 @@ public class WechatConstant {
     public static final String EVENT_TYPE_LOCATION = "LOCATION";
 
     /**
+     * 事件类型：用户菜单上报地理位置信息
+     */
+    public static final String EVENT_TYPE_LOCATION_SELECT = "location_select";
+
+    /**
      * 事件类型：CLICK(自定义菜单点击事件)
      */
     public static final String EVENT_TYPE_CLICK = "CLICK";
@@ -144,5 +149,5 @@ public class WechatConstant {
 
     public static final String CONSTANT_MSG_TYPE = "MsgType";
 
-    public static final String CONSTANT_EVENT = "event";
+    public static final String CONSTANT_EVENT = "Event";
 }

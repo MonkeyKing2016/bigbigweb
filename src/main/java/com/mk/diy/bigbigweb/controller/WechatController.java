@@ -7,6 +7,8 @@ import com.mk.diy.bigbigweb.service.IWechatService;
 import com.mk.diy.bigbigweb.utils.AesException;
 import com.mk.diy.bigbigweb.utils.WXBizMsgCrypt;
 import org.apache.commons.codec.binary.Base64;
+import org.dom4j.Document;
+import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,18 +116,59 @@ public class WechatController {
     @ResponseBody
     public void dev(HttpServletRequest request, HttpServletResponse response) throws IOException{
         logger.info("request getContentType :{}",request.getContentType());
-        logger.info(String.format("request getContentType : %s",request.getContentType()));
-        byte[] bytes = new byte[1024];
-        ServletInputStream inputStream = request.getInputStream();
-        int rc = 0;
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        while ((rc = inputStream.read(bytes, 0, 100)) > 0) {
-            outputStream.write(bytes, 0, rc);
+        logger.info("request params name :{}",JSON.toJSONString(request.getParameterNames()));
+        logger.info("request params :{}",JSON.toJSONString(request.getParameterMap()));
+        boolean isGet = request.getMethod().toLowerCase().equals("get");
+
+        String signature = null;
+        String timestamp = null;
+        String nonce = null;
+        String echostr = null;
+        String result = null;
+        String msg_signature = null;
+        WXBizMsgCrypt crypt = null;
+
+        PrintWriter out = response.getWriter();
+
+        try {
+
+            signature = request.getParameter("signature");// 微信加密签名
+            msg_signature = request.getParameter("msg_signature");// 微信加密签名
+            timestamp = request.getParameter("timestamp");// 时间戳
+            nonce = request.getParameter("nonce");// 随机数
+            echostr = request.getParameter("echostr");//随机字符串
+
+            logger.info(signature);
+            logger.info(msg_signature);
+            logger.info(timestamp);
+            logger.info(nonce);
+            logger.info(echostr);
+
+            crypt = new WXBizMsgCrypt(WechatConstant.Token, WechatConstant.EncodingAESKey,WechatConstant.AppId);
+
+            if (isGet) {
+
+                // 通过检验signature对请求进行校验，若校验成功则原样返回echostr，表示接入成功，否则接入失败
+                result = crypt.access(signature, timestamp, nonce, echostr);
+
+            }else{
+
+                SAXReader reader = new SAXReader();
+                Document document = reader.read(request.getInputStream());
+                String xml = document.asXML();
+                logger.info("请求报文：===》 {}",xml);
+
+                result = wechatService.processRequest(xml);
+                logger.info("返回结果：===》 {}",result);
+            }
+        } catch (AesException aes) {
+            processAesException(signature, timestamp, nonce, echostr, aes);
+        } catch (Exception e) {
+            logger.error(String.format("未知错误！！！.signature:%s,timestamp:%s,nonce:%s,echostr:%s,message:%s",signature,timestamp,nonce,echostr,e.getMessage()));
+        } finally {
+            response.getWriter().write(result);
+            out.close();
         }
-        bytes = outputStream.toByteArray();
-        String result = new String(Base64.encodeBase64(bytes));
-        logger.info("result : {}",result);
-        logger.info(String.format("result : %s",result));
     }
 
 

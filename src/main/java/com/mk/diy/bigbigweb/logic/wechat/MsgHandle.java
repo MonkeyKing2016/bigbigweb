@@ -64,7 +64,11 @@ public class MsgHandle {
     }
 
     public String process(LocationEvent locationEvent) {
-        return defualtRespByType(locationEvent.getFromUserName(),locationEvent.getToUserName(),locationEvent.getMsgType());
+        return defualtRespByType(locationEvent.getFromUserName(),locationEvent.getToUserName(),locationEvent.getEvent());
+    }
+    // TODO vo需要重新定义
+    public String processLocationEvent(LocationEvent locationEvent) {
+        return defualtRespByType(locationEvent.getFromUserName(),locationEvent.getToUserName(),locationEvent.getEvent());
     }
 
     public String processSubscribe(SubscribeEvent subscribeEvent) {
