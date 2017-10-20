@@ -1,10 +1,15 @@
 package com.mk.diy.bigbigweb.logic.wechat;
 
 import com.alibaba.fastjson.JSON;
+import com.mk.diy.bigbigweb.constant.WechatApiConstant;
 import com.mk.diy.bigbigweb.constant.WechatConstant;
 import com.mk.diy.bigbigweb.model.request.*;
+import com.mk.diy.bigbigweb.service.impl.WechatServiceImpl;
 import com.mk.diy.bigbigweb.utils.AesException;
+import com.mk.diy.bigbigweb.utils.HttpsUtil;
 import com.mk.diy.bigbigweb.utils.XMLParse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -18,7 +23,8 @@ import java.util.Map;
  */
 @Repository
 public class WechatHandle {
-    
+    Logger logger = LoggerFactory.getLogger(WechatServiceImpl.class);
+
     @Autowired
     private MsgHandle msgHandle;
 
@@ -71,27 +77,65 @@ public class WechatHandle {
     private String switchEvent(Map<String, String> map, String event) throws AesException {
         String result = "SUCCESS";
         switch (event) {
-            case WechatConstant.EVENT_TYPE_SUBSCRIBE :
+            case WechatConstant.EVENT_TYPE_SUBSCRIBE:
                 result = msgHandle.processSubscribe(JSON.parseObject(JSON.toJSONString(map), SubscribeEvent.class));
                 break;
-            case WechatConstant.EVENT_TYPE_UNSUBSCRIBE :
+            case WechatConstant.EVENT_TYPE_UNSUBSCRIBE:
                 result = msgHandle.processUnsubsribe(JSON.parseObject(JSON.toJSONString(map), SubscribeEvent.class));
                 break;
-            case WechatConstant.EVENT_TYPE_SCAN :
+            case WechatConstant.EVENT_TYPE_SCAN:
                 result = msgHandle.processScan(JSON.parseObject(JSON.toJSONString(map), SubscribeEvent.class));
                 break;
-            case WechatConstant.EVENT_TYPE_LOCATION :
+            case WechatConstant.EVENT_TYPE_LOCATION:
                 result = msgHandle.process(JSON.parseObject(JSON.toJSONString(map), LocationEvent.class));
                 break;
-            case WechatConstant.EVENT_TYPE_CLICK :
+            case WechatConstant.EVENT_TYPE_CLICK:
                 result = msgHandle.processClick(JSON.parseObject(JSON.toJSONString(map), MenuEvent.class));
                 break;
-            case WechatConstant.EVENT_TYPE_VIEW :
+            case WechatConstant.EVENT_TYPE_VIEW:
                 result = msgHandle.processView(JSON.parseObject(JSON.toJSONString(map), MenuEvent.class));
                 break;
             default:
                 throw new AesException(AesException.UnkownEvent);
         }
         return result;
+    }
+
+    public boolean getToken() {
+        boolean isOk = false;
+        try {
+            String url = String.format(WechatApiConstant.GET_TOKEN, WechatConstant.TOKEN_TYPE, WechatConstant.AppId, WechatConstant.AppSecret);
+            String result = HttpsUtil.get(url, null);
+
+            Map map = JSON.parseObject(result, Map.class);
+            Object token = map.get("access_token");
+
+            if (token != null) {
+                WechatConstant.AccessToken = token.toString();
+                logger.info(String.format("AccessToken:%s",WechatConstant.AccessToken));
+                isOk = true;
+            } else {
+                logger.info(String.format("获取 AccessToken 失败。errorCode:%s.errorMsg:%s", map.get("errcode"), map.get("errmsg")));
+            }
+
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        return isOk;
+    }
+
+    public boolean sendMsg(CustomSendMsg sendMsg) {
+        boolean isOk = false;
+        try {
+            String url = String.format(WechatApiConstant.CUSTOM_SEND_POST, WechatConstant.AccessToken);
+            String result = HttpsUtil.post(url, JSON.toJSONString(sendMsg));
+
+            isOk = true;
+
+            logger.info(result);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        return isOk;
     }
 }

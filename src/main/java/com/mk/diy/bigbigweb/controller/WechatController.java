@@ -3,7 +3,6 @@ package com.mk.diy.bigbigweb.controller;
 import com.alibaba.fastjson.JSON;
 import com.mk.diy.bigbigweb.constant.WechatConstant;
 import com.mk.diy.bigbigweb.model.WechatRequestModel;
-import com.mk.diy.bigbigweb.model.WechatResponseModel;
 import com.mk.diy.bigbigweb.service.IWechatService;
 import com.mk.diy.bigbigweb.utils.AesException;
 import com.mk.diy.bigbigweb.utils.WXBizMsgCrypt;
@@ -35,6 +34,7 @@ import java.io.PrintWriter;
 @RequestMapping("/wechat")
 public class WechatController {
     Logger logger = LoggerFactory.getLogger(WechatController.class);
+
 
     @Autowired
     private IWechatService wechatService;
@@ -127,6 +127,7 @@ public class WechatController {
         logger.info("result : {}",result);
         logger.info(String.format("result : %s",result));
     }
+
 
     private void processAesException(String signature, String timestamp, String nonce, String echostr, AesException aes) {
         switch (aes.getCode()) {

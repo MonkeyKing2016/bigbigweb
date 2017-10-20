@@ -1,18 +1,46 @@
 package com.mk.diy.bigbigweb.constant;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+
 /**
  * 微信常量类
  *
  * @author wanghao
  * @create 2017-10-14 16:02
  */
+@Component
 public class WechatConstant {
-    public static final String AppId = "wxbc39091dcba6bf22";
-    public static final String Appsecret = "99b15def1fb9ee752765e2869c08a14f";
-    public static final String Token = "b8ed1ac5d6a52839489774e2676e3e27";
-    public static final String EncodingAESKey = "3Db9zs7j5Lz4uEY51k8gFB9kWBKeErEJYc8SaVA1bCJ";
 
-    public static String accessToken = "";
+    @Value("${wechat.AppId}")
+    private String appId;
+    @Value("${wechat.AppSecret}")
+    private String appSecret;
+    @Value("${wechat.Token}")
+    private String token;
+    @Value("${wechat.EncodingAESKey}")
+    private String encodingAESKey;
+
+    public static String AppId;
+    public static String AppSecret;
+    public static String Token;
+    public static String EncodingAESKey;
+
+    @PostConstruct
+    private void init(){
+        AppId = this.appId;
+        AppSecret = this.appSecret;
+        Token = this.token;
+        EncodingAESKey = this.encodingAESKey;
+    }
+    // 2017-10-19 15:00:33.723
+    public static String AccessToken = "MgVqmzcpheGNKT1yN8GYqAKMSBVL2giKTEh9lBTJTjCSzEFfwuJHleJ2iPKkO2jcd0il2FyCIsTcnSYgHwidKcQjkiMQWt5Ceo_Nl5wK89zoGI5r9TFjTeGsOVN4UpvAXXLdABASSG";
+
+    public static final String TOKEN_TYPE = "client_credential";
+
     /**
      * 返回消息类型：图片 1
      */

@@ -1,6 +1,9 @@
 package com.mk.diy.bigbigweb.service;
 
+import com.mk.diy.bigbigweb.model.request.CustomSendMsg;
 import com.mk.diy.bigbigweb.utils.AesException;
+
+import java.util.Map;
 
 /**
  * 微信服务
@@ -11,4 +14,9 @@ import com.mk.diy.bigbigweb.utils.AesException;
 public interface IWechatService {
 
     String processRequest(String xmlText) throws AesException;
+
+    boolean getToken();
+
+    boolean sendMsg(CustomSendMsg sendMsg);
+
 }

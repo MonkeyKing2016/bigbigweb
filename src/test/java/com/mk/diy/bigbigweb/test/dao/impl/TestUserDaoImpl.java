@@ -7,10 +7,8 @@ import com.mk.diy.bigbigweb.model.WechatEncrypt;
 import com.mk.diy.bigbigweb.model.WechatRequestModel;
 import com.mk.diy.bigbigweb.model.WechatResponseModel;
 import com.mk.diy.bigbigweb.model.request.TextMsg;
-import com.mk.diy.bigbigweb.model.response.ResponseBase;
 import com.mk.diy.bigbigweb.model.response.TextResponse;
 import com.mk.diy.bigbigweb.test.base.TestBaseConfig;
-import com.mk.diy.bigbigweb.test.model.Student;
 import com.mk.diy.bigbigweb.test.model.TestBase;
 import com.mk.diy.bigbigweb.test.model.TestCat;
 import com.mk.diy.bigbigweb.test.util.TestXstreamUtil;
@@ -18,13 +16,13 @@ import com.mk.diy.bigbigweb.utils.AesException;
 import com.mk.diy.bigbigweb.utils.WXBizMsgCrypt;
 import com.mk.diy.bigbigweb.utils.XMLParse;
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.StaxDriver;
 import org.dom4j.DocumentException;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.xml.sax.SAXException;
+
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.ValidationException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -191,5 +189,6 @@ public class TestUserDaoImpl extends TestBaseConfig{
         String toXML = xStream.toXML(wrm);
         System.out.println(toXML);
     }
+
 
 }

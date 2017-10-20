@@ -18,15 +18,15 @@ public class WechatAdminController {
 
     }
     @RequestMapping("/wechat/createMenu")
-    public void createMenu(@RequestParam("authCode") String authCode){
+    public void createMenu(){
 
     }
     @RequestMapping("/wechat/findMenu")
-    public void findMenu(@RequestParam("authCode") String authCode){
+    public void findMenu(){
 
     }
     @RequestMapping("/wechat/postMsg")
-    public void postMsg(@RequestParam("authCode") String authCode){
+    public void postMsg(){
 
     }
 }

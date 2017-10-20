@@ -6,10 +6,9 @@
        http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context
-       http://www.springframework.org/schema/context/spring-context.xsd">
-    <context:property-placeholder location="classpath:redis/redis.properties"/>
-    <context:component-scan base-package="com.mk.diy.bigbigweb.dao"
-                            annotation-config="true" />
+       http://www.springframework.org/schema/context/spring-context.xsd
+">
+
     <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
         <property name="maxIdle" value="${redis.maxIdle}"/>
         <property name="maxTotal" value="${redis.maxActive}"/>
