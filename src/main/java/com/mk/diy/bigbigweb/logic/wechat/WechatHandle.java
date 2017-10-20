@@ -130,12 +130,37 @@ public class WechatHandle {
             String url = String.format(WechatApiConstant.CUSTOM_SEND_POST, WechatConstant.AccessToken);
             String result = HttpsUtil.post(url, JSON.toJSONString(sendMsg));
 
-            isOk = true;
+            isOk = checkResult(result);
 
             logger.info(result);
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
         return isOk;
+    }
+
+    public boolean creatMenu(MenuModel menuModel) {
+        boolean isOk = false;
+        try {
+            String url = String.format(WechatApiConstant.MENU_CREATE_POST, WechatConstant.AccessToken);
+            String result = HttpsUtil.post(url, JSON.toJSONString(menuModel));
+
+            isOk = checkResult(result);
+
+            logger.info(result);
+        } catch (Exception e) {
+            isOk = false;
+            logger.error(e.getMessage());
+        }
+        return isOk;
+    }
+
+    private boolean checkResult(String json) {
+        Map map = JSON.parseObject(json, Map.class);
+        if ("0".equals(map.get("errcode").toString())) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

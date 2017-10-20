@@ -1,9 +1,8 @@
 package com.mk.diy.bigbigweb.service;
 
 import com.mk.diy.bigbigweb.model.request.CustomSendMsg;
+import com.mk.diy.bigbigweb.model.request.MenuModel;
 import com.mk.diy.bigbigweb.utils.AesException;
-
-import java.util.Map;
 
 /**
  * 微信服务
@@ -19,4 +18,5 @@ public interface IWechatService {
 
     boolean sendMsg(CustomSendMsg sendMsg);
 
+    boolean creatMenu(MenuModel menuModel);
 }

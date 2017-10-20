@@ -36,8 +36,8 @@ public class WechatConstant {
         Token = this.token;
         EncodingAESKey = this.encodingAESKey;
     }
-    // 2017-10-19 15:00:33.723
-    public static String AccessToken = "MgVqmzcpheGNKT1yN8GYqAKMSBVL2giKTEh9lBTJTjCSzEFfwuJHleJ2iPKkO2jcd0il2FyCIsTcnSYgHwidKcQjkiMQWt5Ceo_Nl5wK89zoGI5r9TFjTeGsOVN4UpvAXXLdABASSG";
+    // 2017-10-20 13:51:41.973
+    public static String AccessToken = "MR3oXcNSS_GnJIY-y1rKw217TK7hYPFpNKq6pcjAJgGpkvLRGl_-XknZ_kbundRryDCBS_zLxCSqgYgA-Asy-IklhjTYF6PZcPx1SGHSeuZLpaeyJ_0ytFVj8c7FAUGAXGEhAFAGPN";
 
     public static final String TOKEN_TYPE = "client_credential";
 

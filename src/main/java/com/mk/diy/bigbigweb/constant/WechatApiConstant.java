@@ -16,32 +16,32 @@ public class WechatApiConstant {
     /**
      * 自定义菜单 ：创建自定义菜单
      */
-    public static final String CREATE_MENU_POST ="https://api.weixin.qq.com/cgi-bin/menu/create?access_token=%s";
+    public static final String MENU_CREATE_POST ="https://api.weixin.qq.com/cgi-bin/menu/create?access_token=%s";
 
     /**
      * 自定义菜单 ：查询自定义菜单
      */
-    public static final String QUERY_MENU_GET = "https://api.weixin.qq.com/cgi-bin/menu/get?access_token=%s";
+    public static final String MENU_QUERY_GET = "https://api.weixin.qq.com/cgi-bin/menu/get?access_token=%s";
 
     /**
      * 自定义菜单 ：删除自定义菜单
      */
-    public static final String DEL_MENU_GET = "https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=%s";
+    public static final String MENU_DEL_GET = "https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=%s";
 
     /**
      * 自定义菜单 ：创建个性化菜单
      */
-    public static final String CREATE_CONDITIONAL_MENU_POST = "https://api.weixin.qq.com/cgi-bin/menu/addconditional?access_token=%s";
+    public static final String MENU_CREATE_CONDITIONAL_POST = "https://api.weixin.qq.com/cgi-bin/menu/addconditional?access_token=%s";
 
     /**
      * 自定义菜单 ：删除个性化菜单
      */
-    public static final String DEL_CONDITIONAL_MENU_GET = "https://api.weixin.qq.com/cgi-bin/menu/delconditional?access_token=%s";
+    public static final String MENU_DEL_CONDITIONAL_GET = "https://api.weixin.qq.com/cgi-bin/menu/delconditional?access_token=%s";
 
     /**
      * 自定义菜单 ：测试个性化菜单匹配结果
      */
-    public static final String TRY_CONDITIONAL_MENU_POST = "https://api.weixin.qq.com/cgi-bin/menu/trymatch?access_token=%s";
+    public static final String MENU_TRY_CONDITIONAL_POST = "https://api.weixin.qq.com/cgi-bin/menu/trymatch?access_token=%s";
 
     /**
      * 自定义菜单 ：获取自定义菜单配置接口
@@ -52,7 +52,7 @@ public class WechatApiConstant {
      * 4、从第三方平台的公众号登录授权机制上来说，该接口从属于消息与菜单权限集。
      * 5、本接口中返回的图片/语音/视频为临时素材（临时素材每次获取都不同，3天内有效，通过素材管理-获取临时素材接口来获取这些素材），本接口返回的图文消息为永久素材素材（通过素材管理-获取永久素材接口来获取这些素材）。
      */
-    public static final String QUERY_MENU_CONFIG_GET = "https://api.weixin.qq.com/cgi-bin/get_current_selfmenu_info?access_token=%s";
+    public static final String MENU_CONFIG_QUERY_GET = "https://api.weixin.qq.com/cgi-bin/get_current_selfmenu_info?access_token=%s";
 
     /**
      * 发送信息-客服信息：添加客服账号

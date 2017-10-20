@@ -2,11 +2,15 @@ package com.mk.diy.bigbigweb.test.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.mk.diy.bigbigweb.constant.WechatConstant;
+import com.mk.diy.bigbigweb.enums.MenuType;
 import com.mk.diy.bigbigweb.model.request.CustomSendMsg;
 import com.mk.diy.bigbigweb.model.request.CustomSendText;
+import com.mk.diy.bigbigweb.model.request.MenuButton;
+import com.mk.diy.bigbigweb.model.request.MenuModel;
 import com.mk.diy.bigbigweb.service.IWechatService;
 import com.mk.diy.bigbigweb.test.base.TestBaseConfig;
 import com.mk.diy.bigbigweb.utils.AesException;
+import com.mk.diy.bigbigweb.utils.WechatMenuUtil;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.ClientProtocolException;
@@ -22,6 +26,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * test
@@ -77,6 +83,61 @@ public class TestServiceImpl extends TestBaseConfig {
         sendMsg.setText(sendText);
         System.out.println(JSON.toJSONString(sendMsg));
         boolean msg = wechatService.sendMsg(sendMsg);
+        System.out.println(msg);
+    }
+
+    @Test
+    public void creatMenu() {
+        MenuModel menuModel = new MenuModel();
+
+        MenuButton button1 = WechatMenuUtil.createButton(MenuType.CLICK,"CLICK","i_am_a_key_001");
+        MenuButton button3 = WechatMenuUtil.createButton(MenuType.SCANCODE_PUSH,"SCANCODE_PUSH","i_am_a_key_002");
+        MenuButton button4 = WechatMenuUtil.createButton(MenuType.SCANCODE_WAITMSG,"SCANCODE_WAITMSG","i_am_a_key_003");
+
+        MenuButton button5 = WechatMenuUtil.createButton(MenuType.PIC_SYSPHOTO,"PIC_SYSPHOTO","i_am_a_key_004");
+        MenuButton button6 = WechatMenuUtil.createButton(MenuType.PIC_PHOTO_OR_ALBUM,"PIC_PHOTO_OR_ALBUM","i_am_a_key_005");
+        MenuButton button7 = WechatMenuUtil.createButton(MenuType.PIC_WEIXIN,"PIC_WEIXIN","i_am_a_key_006");
+        MenuButton button8 = WechatMenuUtil.createButton(MenuType.LOCATION_SELECT,"LOCATION_SELECT","i_am_a_key_007");
+
+        MenuButton button2 = WechatMenuUtil.createButton(MenuType.VIEW,"VIEW","https://www.baidu.com");
+        MenuButton button9 = WechatMenuUtil.createButton(MenuType.MEDIA_ID,"MEDIA_ID","media_id");
+        MenuButton button10 = WechatMenuUtil.createButton(MenuType.VIEW_LIMITED,"VIEW_LIMITED","media_id");
+        MenuButton button11 = WechatMenuUtil.createButton(MenuType.MINIPROGRAM,"MINIPROGRAM","小程序url","appid","pagepath");
+
+        List<MenuButton> subButtonList = null;
+        MenuButton today = WechatMenuUtil.createMainButton("今日热门");
+        subButtonList = new ArrayList<>();
+        subButtonList.add(button1);
+        subButtonList.add(button3);
+        subButtonList.add(button4);
+        today.setSub_button(subButtonList);
+
+        MenuButton recommend = WechatMenuUtil.createMainButton("精彩推荐");
+        subButtonList = new ArrayList<>();
+        subButtonList.add(button5);
+        subButtonList.add(button6);
+        subButtonList.add(button7);
+        subButtonList.add(button8);
+        recommend.setSub_button(subButtonList);
+
+
+        MenuButton we = WechatMenuUtil.createMainButton("关于我们");
+        subButtonList = new ArrayList<>();
+        subButtonList.add(button2);
+//        subButtonList.add(button9);
+//        subButtonList.add(button10);
+//        subButtonList.add(button11);
+        we.setSub_button(subButtonList);
+
+        subButtonList = new ArrayList<>();
+        subButtonList.add(today);
+        subButtonList.add(recommend);
+        subButtonList.add(we);
+        menuModel.setButton(subButtonList);
+
+        System.out.println(JSON.toJSONString(menuModel));
+
+        boolean msg = wechatService.creatMenu(menuModel);
         System.out.println(msg);
     }
 

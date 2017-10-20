@@ -2,6 +2,7 @@ package com.mk.diy.bigbigweb.service.impl;
 
 import com.mk.diy.bigbigweb.logic.wechat.WechatHandle;
 import com.mk.diy.bigbigweb.model.request.CustomSendMsg;
+import com.mk.diy.bigbigweb.model.request.MenuModel;
 import com.mk.diy.bigbigweb.service.IWechatService;
 import com.mk.diy.bigbigweb.utils.AesException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,11 @@ public class WechatServiceImpl implements IWechatService{
     @Override
     public boolean sendMsg(CustomSendMsg sendMsg) {
         return wechatHandle.sendMsg(sendMsg);
+    }
+
+    @Override
+    public boolean creatMenu(MenuModel menuModel) {
+        return wechatHandle.creatMenu(menuModel);
     }
 
 }
