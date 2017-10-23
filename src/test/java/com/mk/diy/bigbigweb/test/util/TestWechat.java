@@ -1,5 +1,6 @@
 package com.mk.diy.bigbigweb.test.util;
 
+import com.alibaba.fastjson.JSON;
 import com.mk.diy.bigbigweb.constant.WechatApiConstant;
 import com.mk.diy.bigbigweb.constant.WechatConstant;
 import com.mk.diy.bigbigweb.test.base.TestBaseConfig;
@@ -19,5 +20,10 @@ public class TestWechat extends TestBaseConfig{
         String result = HttpsUtil.get(url, null);
         String token = "Zk7ufBXGrsI_VAEO_LlpeAI9lDk-k3frVJQ02ElAj_AbKu1ZL9UYEngJTAwO7MMMoTuvEqVwaULmBj_z4c8uNqA7tFZ3zvwyMi5IJ_cmiRYMXIhAFAHSD";
         System.out.println(result);
+    }
+
+    @Test
+    public void testMap(){
+        System.out.println(JSON.toJSONString(WechatConstant.Map));
     }
 }

@@ -33,21 +33,18 @@ public class WechatConstant {
 
     public static Map<String,String> Map = new HashMap<>();
 
-    static {
-        Map.put("15346622051",null);
-        Map.put("15346622052",null);
-        Map.put("15346622053",null);
-        Map.put("15346622054",null);
-        Map.put("15346622055",null);
-        Map.put("15346622056",null);
-    }
-
     @PostConstruct
     private void init(){
         AppId = this.appId;
         AppSecret = this.appSecret;
         Token = this.token;
         EncodingAESKey = this.encodingAESKey;
+        Map.put("15346622051",null);
+        Map.put("15346622052",null);
+        Map.put("15346622053",null);
+        Map.put("15346622054",null);
+        Map.put("15346622055",null);
+        Map.put("15346622056",null);
     }
     // 2017-10-20 15:15:31.424
     public static String AccessToken = "Km3XpJXdymQ5mjTqnXvvrIT1FVnluxPJJUHXoOYtsc7J67BjZPadXl91lEBYjJAtSFQKQlVrpBWxGqgi5eHQi83sVsLwNJQtF63-T21-3nPA6t3mE-TiCHE27swzAF1UWHOfABAMXE";
