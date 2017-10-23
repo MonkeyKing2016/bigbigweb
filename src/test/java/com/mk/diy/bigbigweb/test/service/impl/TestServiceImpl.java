@@ -90,16 +90,16 @@ public class TestServiceImpl extends TestBaseConfig {
     public void creatMenu() {
         MenuModel menuModel = new MenuModel();
 
-        MenuButton button1 = WechatMenuUtil.createButton(MenuType.CLICK,"CLICK","i_am_a_key_001");
-        MenuButton button3 = WechatMenuUtil.createButton(MenuType.SCANCODE_PUSH,"SCANCODE_PUSH","i_am_a_key_002");
-        MenuButton button4 = WechatMenuUtil.createButton(MenuType.SCANCODE_WAITMSG,"SCANCODE_WAITMSG","i_am_a_key_003");
+        MenuButton button1 = WechatMenuUtil.createButton(MenuType.CLICK,"点击事件","i_am_a_key_001");
+        MenuButton button3 = WechatMenuUtil.createButton(MenuType.SCANCODE_PUSH,"扫码事件","i_am_a_key_002");
+        MenuButton button4 = WechatMenuUtil.createButton(MenuType.SCANCODE_WAITMSG,"扫码消息接受","i_am_a_key_003");
 
-        MenuButton button5 = WechatMenuUtil.createButton(MenuType.PIC_SYSPHOTO,"PIC_SYSPHOTO","i_am_a_key_004");
-        MenuButton button6 = WechatMenuUtil.createButton(MenuType.PIC_PHOTO_OR_ALBUM,"PIC_PHOTO_OR_ALBUM","i_am_a_key_005");
-        MenuButton button7 = WechatMenuUtil.createButton(MenuType.PIC_WEIXIN,"PIC_WEIXIN","i_am_a_key_006");
-        MenuButton button8 = WechatMenuUtil.createButton(MenuType.LOCATION_SELECT,"LOCATION_SELECT","i_am_a_key_007");
+        MenuButton button5 = WechatMenuUtil.createButton(MenuType.PIC_SYSPHOTO,"拍照/摄像","i_am_a_key_004");
+        MenuButton button6 = WechatMenuUtil.createButton(MenuType.PIC_PHOTO_OR_ALBUM,"拍照/相册","i_am_a_key_005");
+        MenuButton button7 = WechatMenuUtil.createButton(MenuType.PIC_WEIXIN,"相册","i_am_a_key_006");
+        MenuButton button8 = WechatMenuUtil.createButton(MenuType.LOCATION_SELECT,"上报地址","i_am_a_key_007");
 
-        MenuButton button2 = WechatMenuUtil.createButton(MenuType.VIEW,"VIEW","https://www.baidu.com");
+        MenuButton button2 = WechatMenuUtil.createButton(MenuType.VIEW,"跳转链接","https://www.baidu.com");
         MenuButton button9 = WechatMenuUtil.createButton(MenuType.MEDIA_ID,"MEDIA_ID","media_id");
         MenuButton button10 = WechatMenuUtil.createButton(MenuType.VIEW_LIMITED,"VIEW_LIMITED","media_id");
         MenuButton button11 = WechatMenuUtil.createButton(MenuType.MINIPROGRAM,"MINIPROGRAM","小程序url","appid","pagepath");

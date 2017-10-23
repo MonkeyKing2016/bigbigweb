@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 微信常量类
@@ -29,6 +31,17 @@ public class WechatConstant {
     public static String Token;
     public static String EncodingAESKey;
 
+    public static Map<String,String> Map = new HashMap<>();
+
+    static {
+        Map.put("15346622051",null);
+        Map.put("15346622052",null);
+        Map.put("15346622053",null);
+        Map.put("15346622054",null);
+        Map.put("15346622055",null);
+        Map.put("15346622056",null);
+    }
+
     @PostConstruct
     private void init(){
         AppId = this.appId;
@@ -36,8 +49,8 @@ public class WechatConstant {
         Token = this.token;
         EncodingAESKey = this.encodingAESKey;
     }
-    // 2017-10-20 13:51:41.973
-    public static String AccessToken = "MR3oXcNSS_GnJIY-y1rKw217TK7hYPFpNKq6pcjAJgGpkvLRGl_-XknZ_kbundRryDCBS_zLxCSqgYgA-Asy-IklhjTYF6PZcPx1SGHSeuZLpaeyJ_0ytFVj8c7FAUGAXGEhAFAGPN";
+    // 2017-10-20 15:15:31.424
+    public static String AccessToken = "Km3XpJXdymQ5mjTqnXvvrIT1FVnluxPJJUHXoOYtsc7J67BjZPadXl91lEBYjJAtSFQKQlVrpBWxGqgi5eHQi83sVsLwNJQtF63-T21-3nPA6t3mE-TiCHE27swzAF1UWHOfABAMXE";
 
     public static final String TOKEN_TYPE = "client_credential";
 

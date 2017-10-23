@@ -53,6 +53,13 @@ class Test {
         System.out.println(1);
         // TODO Auto-generated method stub
         Test t=new Test("init");
+        t = null;
+        try {
+            t.getClass();
+        } catch (Exception e) {
+            System.out.println(e.getClass().getName());
+        }
+
     }
 
 }

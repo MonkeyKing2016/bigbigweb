@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 
@@ -34,9 +35,46 @@ public class MsgHandle {
         logger.info(String.format("process textMsg start... param:%s", JSON.toJSONString(textMsg)));
         String userName = textMsg.getFromUserName();
         String content = textMsg.getContent();
-        WCUserModel user = userDao.getUser(userName);
-        if (user != null) {
-            logger.info(String.format("getUser:%s", JSON.toJSONString(user)));
+        if (StringUtils.isEmpty(content)){
+            content = "您没有说话";
+        }
+        else if (content.startsWith("绑定账号")){
+            // 绑定账户
+            String userNo = content.substring(4,content.length());
+            if (StringUtils.isEmpty( userNo) || userNo.length() <= 6) {
+                content = "需要绑定账号为空或者长度小于6位";
+            } else {
+                // TODO 检查用户是否存在
+                String wechatNo = WechatConstant.Map.get(userNo);
+                if ( wechatNo!=null ) {
+                    content = String.format("该账号:%s 已被绑定.需要解绑请输入解绑账号XXXX");
+                } else {
+                    WechatConstant.Map.put(userNo,userName);
+                    content = "绑定成功";
+                }
+            }
+        }
+        else if (content.startsWith("解绑账号")){
+            // 绑定账户
+            String userNo = content.substring(4,content.length());
+            if (StringUtils.isEmpty( userNo) || userNo.length() <= 6) {
+                content = "需要解绑账户为空或者长度小于6位";
+            } else {
+                String userTempName = "";
+                M : for (String key : WechatConstant.Map.keySet()) {
+                    String value = WechatConstant.Map.get(key);
+                    if (userName.equals(value)) {
+                        userTempName = value;
+                        break M;
+                    }
+                }
+                if (StringUtils.isEmpty(userTempName)) {
+                    content = String.format("该账号:%s 没有绑定.需要绑定请输入绑定账号XXXX");
+                } else{
+                    WechatConstant.Map.remove(userNo);
+                    content = "解绑成功";
+                }
+            }
         }
         String result = defualtResp(textMsg.getFromUserName(), textMsg.getToUserName(), String.format("[ %s ]", content));
         logger.info(String.format("processSubscribe end..."));
@@ -78,7 +116,7 @@ public class MsgHandle {
         userModel.setWechatNo(userName);
         userModel.setCreateTime(String.valueOf(new Date().getTime()));
         userDao.saveUser(userModel);
-        String content = "恭喜你获得该订阅号究极权限！";
+        String content = "需要绑定请回复绑定账户XXXX！例如绑定账户123456则成功绑定123456的账户";
         String result = defualtResp(subscribeEvent.getFromUserName(),subscribeEvent.getToUserName(),content);
         logger.info(String.format("processSubscribe end..."));
         return result;
@@ -88,6 +126,21 @@ public class MsgHandle {
         logger.info(String.format("processUnsubsribe start... param:%s", JSON.toJSONString(subscribeEvent)));
         String userName = subscribeEvent.getFromUserName();
         Integer result = userDao.deleteUser(userName);
+
+        // 解绑账户
+        String userNo = "";
+        M : for (String key : WechatConstant.Map.keySet()) {
+            String value = WechatConstant.Map.get(key);
+            if (userName.equals(value)) {
+                userNo = key;
+                break M;
+            }
+        }
+        if (!StringUtils.isEmpty(userNo)) {
+            WechatConstant.Map.remove(userNo);
+            logger.info("解绑成功 userNo{},userName:{}",userNo,userName);
+        }
+
         if (result > 0) {
             logger.info(String.format("processUnsubsribe success..."));
         }
@@ -100,6 +153,7 @@ public class MsgHandle {
     }
 
     public String processClick(MenuEvent menuEvent) {
+        logger.info("账号查询:[==> {} <==]",JSON.toJSONString(WechatConstant.Map));
         return SUCCESS;
     }
 
