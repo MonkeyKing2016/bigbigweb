@@ -1,10 +1,13 @@
 package com.mk.diy.bigbigweb.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.mk.diy.bigbigweb.constant.WechatApiConstant;
 import com.mk.diy.bigbigweb.constant.WechatConstant;
 import com.mk.diy.bigbigweb.model.WechatRequestModel;
 import com.mk.diy.bigbigweb.service.IWechatService;
 import com.mk.diy.bigbigweb.utils.AesException;
+import com.mk.diy.bigbigweb.utils.HttpsUtil;
 import com.mk.diy.bigbigweb.utils.WXBizMsgCrypt;
 import org.apache.commons.codec.binary.Base64;
 import org.dom4j.Document;
@@ -14,10 +17,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -113,9 +118,19 @@ public class WechatController {
     }
 
     @RequestMapping(value="/authorize.do",method = {RequestMethod.GET, RequestMethod.POST})
-    public String authorize(String code, String state) throws IOException{
+    public ModelAndView authorize(String code, String state) throws IOException{
+        ModelAndView view = new ModelAndView("index");
         logger.info("code:{},state:{}", code, state);
-        return "index";
+        String url = String.format(WechatApiConstant.GET_AUTHORIZATION_CODE_TOKEN, WechatConstant.AppId, WechatConstant.AppSecret, code);
+        logger.info("url:{}",url);
+        String json = HttpsUtil.post(url, "");
+        JSONObject jsonObject = JSON.parseObject(json);
+        String openid = jsonObject.get("openid") != null ? jsonObject.get("openid").toString() : "";
+        if (!StringUtils.isEmpty(openid)) {
+            view.addObject("title",openid);
+        }
+        logger.info("json:{}",json);
+        return view;
     }
 
     @RequestMapping(value="/dev.do",method = {RequestMethod.GET, RequestMethod.POST})

@@ -14,6 +14,11 @@ public class WechatApiConstant {
     public static final String GET_TOKEN = "https://api.weixin.qq.com/cgi-bin/token?grant_type=%1$s&appid=%2$s&secret=%3$s";
 
     /**
+     * 获取 authorization_code token
+     */
+    public static final String GET_AUTHORIZATION_CODE_TOKEN = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%1$s&secret=%2$s&code=%3$s&grant_type=authorization_code";
+
+    /**
      * 自定义菜单 ：创建自定义菜单
      */
     public static final String MENU_CREATE_POST ="https://api.weixin.qq.com/cgi-bin/menu/create?access_token=%s";

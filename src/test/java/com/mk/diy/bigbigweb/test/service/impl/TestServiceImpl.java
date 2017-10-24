@@ -10,6 +10,7 @@ import com.mk.diy.bigbigweb.model.request.MenuModel;
 import com.mk.diy.bigbigweb.service.IWechatService;
 import com.mk.diy.bigbigweb.test.base.TestBaseConfig;
 import com.mk.diy.bigbigweb.utils.AesException;
+import com.mk.diy.bigbigweb.utils.HttpsUtil;
 import com.mk.diy.bigbigweb.utils.WechatMenuUtil;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
@@ -84,6 +85,13 @@ public class TestServiceImpl extends TestBaseConfig {
         System.out.println(JSON.toJSONString(sendMsg));
         boolean msg = wechatService.sendMsg(sendMsg);
         System.out.println(msg);
+    }
+
+    @Test
+    public void postUrl() {
+        String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx62a65c24af6c5dbb&secret=66e7b2923e453e6952b8fede46f7b718&code=011W2NMb033gSw11vbQb08JFMb0W2NMV&grant_type=authorization_code";
+        String result = HttpsUtil.get(url, null);
+        System.out.println(result);
     }
 
     @Test
