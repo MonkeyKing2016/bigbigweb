@@ -46,8 +46,8 @@ public class WechatConstant {
         Map.put("15346622055",null);
         Map.put("15346622056",null);
     }
-    // 2017-10-20 15:15:31.424
-    public static String AccessToken = "Km3XpJXdymQ5mjTqnXvvrIT1FVnluxPJJUHXoOYtsc7J67BjZPadXl91lEBYjJAtSFQKQlVrpBWxGqgi5eHQi83sVsLwNJQtF63-T21-3nPA6t3mE-TiCHE27swzAF1UWHOfABAMXE";
+    // 2017-10-24 11:05:32.925
+    public static String AccessToken = "vPjt1BWmZ-WZstHHlHXU-TqKkILO6GGBY8mSWUMNoS0z15SiW7VaucdoxNhkR_sTjuiqzBMNARv3T5bLkzI9aZZT-Xg0BE60zWC4TknZNO5N3JriINcb90WazdrJgq_pBNWgAIAFRA";
 
     public static final String TOKEN_TYPE = "client_credential";
 

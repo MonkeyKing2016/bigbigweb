@@ -99,7 +99,9 @@ public class TestServiceImpl extends TestBaseConfig {
         MenuButton button7 = WechatMenuUtil.createButton(MenuType.PIC_WEIXIN,"相册","i_am_a_key_006");
         MenuButton button8 = WechatMenuUtil.createButton(MenuType.LOCATION_SELECT,"上报地址","i_am_a_key_007");
 
-        MenuButton button2 = WechatMenuUtil.createButton(MenuType.VIEW,"跳转链接","https://www.baidu.com");
+        MenuButton button2 = WechatMenuUtil.createButton(MenuType.VIEW,"静默跳转","https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx520c15f417810387&redirect_uri=https%3A%2F%2Fchong.qq.com%2Fphp%2Findex.php%3Fd%3D%26c%3DwxAdap" +
+                "ter%26m%3DmobileDeal%26showwxpaytitle%3D1%26vb2ctag%3D4_2030_5_1194_60&response_type=code&scope=snsapi_bas" +
+                "e&state=123#wechat_redirect");
         MenuButton button9 = WechatMenuUtil.createButton(MenuType.MEDIA_ID,"MEDIA_ID","media_id");
         MenuButton button10 = WechatMenuUtil.createButton(MenuType.VIEW_LIMITED,"VIEW_LIMITED","media_id");
         MenuButton button11 = WechatMenuUtil.createButton(MenuType.MINIPROGRAM,"MINIPROGRAM","小程序url","appid","pagepath");

@@ -112,6 +112,12 @@ public class WechatController {
         return decryptMsg;
     }
 
+    @RequestMapping(value="/authorize.do",method = {RequestMethod.GET, RequestMethod.POST})
+    public String authorize(String code, String state) throws IOException{
+        logger.info("code:{},state:{}", code, state);
+        return "index";
+    }
+
     @RequestMapping(value="/dev.do",method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public void dev(HttpServletRequest request, HttpServletResponse response) throws IOException{
