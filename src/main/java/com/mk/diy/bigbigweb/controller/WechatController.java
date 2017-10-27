@@ -104,6 +104,7 @@ public class WechatController {
     public String devConverter(@RequestBody WechatRequestModel wechatRequestModel,HttpServletRequest request) throws IOException, AesException {
         logger.info(JSON.toJSONString(wechatRequestModel));
         WXBizMsgCrypt crypt = new WXBizMsgCrypt(WechatConstant.Token, WechatConstant.EncodingAESKey,WechatConstant.AppId);
+
         String msg_signature = request.getParameter("msg_signature");// 微信加密签名
         String timestamp = request.getParameter("timestamp");// 时间戳
         String nonce = request.getParameter("nonce");// 随机数
@@ -119,7 +120,7 @@ public class WechatController {
 
     @RequestMapping(value="/authorize.do",method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView authorize(String code, String state) throws IOException{
-        ModelAndView view = new ModelAndView("index");
+        ModelAndView view = new ModelAndView("login");
         logger.info("code:{},state:{}", code, state);
         String url = String.format(WechatApiConstant.GET_AUTHORIZATION_CODE_TOKEN, WechatConstant.AppId, WechatConstant.AppSecret, code);
         logger.info("url:{}",url);

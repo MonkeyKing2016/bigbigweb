@@ -89,9 +89,6 @@ public class WechatHandle {
             case WechatConstant.EVENT_TYPE_LOCATION:
                 result = msgHandle.process(JSON.parseObject(JSON.toJSONString(map), LocationEvent.class));
                 break;
-            case WechatConstant.EVENT_TYPE_LOCATION_SELECT:
-                result = msgHandle.process(JSON.parseObject(JSON.toJSONString(map), LocationEvent.class));
-                break;
             case WechatConstant.EVENT_TYPE_CLICK:
                 result = msgHandle.processClick(JSON.parseObject(JSON.toJSONString(map), MenuEvent.class));
                 break;
@@ -133,7 +130,7 @@ public class WechatHandle {
             String url = String.format(WechatApiConstant.CUSTOM_SEND_POST, WechatConstant.AccessToken);
             String result = HttpsUtil.post(url, JSON.toJSONString(sendMsg));
 
-            isOk = checkResult(result);
+            isOk = true;
 
             logger.info(result);
         } catch (Exception e) {
@@ -148,11 +145,11 @@ public class WechatHandle {
             String url = String.format(WechatApiConstant.MENU_CREATE_POST, WechatConstant.AccessToken);
             String result = HttpsUtil.post(url, JSON.toJSONString(menuModel));
 
-            isOk = checkResult(result);
+            isOk = true;
 
             logger.info(result);
         } catch (Exception e) {
-            isOk = false;
+
             logger.error(e.getMessage());
         }
         return isOk;
