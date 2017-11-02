@@ -124,7 +124,7 @@ public class WechatController {
         logger.info("code:{},state:{}", code, state);
         String url = String.format(WechatApiConstant.GET_AUTHORIZATION_CODE_TOKEN, WechatConstant.AppId, WechatConstant.AppSecret, code);
         logger.info("url:{}",url);
-        String json = HttpsUtil.post(url, "");
+        String json = HttpsUtil.post(url,null ,"");
         JSONObject jsonObject = JSON.parseObject(json);
         String openid = jsonObject.get("openid") != null ? jsonObject.get("openid").toString() : "";
         if (!StringUtils.isEmpty(openid)) {
@@ -137,6 +137,9 @@ public class WechatController {
     @RequestMapping(value="/dev.do",method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public void dev(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        logger.info("request getHeaderNames :{}",JSON.toJSONString(request.getHeaderNames()));
+        logger.info("request getHeaders :{}",JSON.toJSONString(request.getHeaders("accept")));
+        logger.info("request getHeader :{}",request.getHeader("accept"));
         logger.info("request getContentType :{}",request.getContentType());
         logger.info("request params name :{}",JSON.toJSONString(request.getParameterNames()));
         logger.info("request params :{}",JSON.toJSONString(request.getParameterMap()));

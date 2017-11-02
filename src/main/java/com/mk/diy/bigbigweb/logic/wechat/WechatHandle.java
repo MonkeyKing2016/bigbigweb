@@ -105,7 +105,7 @@ public class WechatHandle {
         boolean isOk = false;
         try {
             String url = String.format(WechatApiConstant.GET_TOKEN, WechatConstant.TOKEN_TYPE, WechatConstant.AppId, WechatConstant.AppSecret);
-            String result = HttpsUtil.get(url, null);
+            String result = HttpsUtil.get(url, null,HttpsUtil.URL_PARAM_DECODECHARSET_UTF8);
 
             Map map = JSON.parseObject(result, Map.class);
             Object token = map.get("access_token");
@@ -128,7 +128,10 @@ public class WechatHandle {
         boolean isOk = false;
         try {
             String url = String.format(WechatApiConstant.CUSTOM_SEND_POST, WechatConstant.AccessToken);
-            String result = HttpsUtil.post(url, JSON.toJSONString(sendMsg));
+
+            JSON.toJSONString(sendMsg);
+            // todo
+            String result = HttpsUtil.post(url, null , HttpsUtil.URL_PARAM_DECODECHARSET_UTF8);
 
             isOk = true;
 
@@ -143,7 +146,8 @@ public class WechatHandle {
         boolean isOk = false;
         try {
             String url = String.format(WechatApiConstant.MENU_CREATE_POST, WechatConstant.AccessToken);
-            String result = HttpsUtil.post(url, JSON.toJSONString(menuModel));
+            // HttpsUtil.post(url, JSON.toJSONString(menuModel));
+            String result = null;
 
             isOk = true;
 

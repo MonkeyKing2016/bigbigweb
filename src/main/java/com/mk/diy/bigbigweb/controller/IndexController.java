@@ -1,11 +1,18 @@
 package com.mk.diy.bigbigweb.controller;
 
+import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
+import java.util.Map;
 
 /**
  * 主页controller
@@ -35,5 +42,37 @@ public class IndexController {
         logger.info("post 执行");
         System.out.println("post");
         return new ModelAndView("index");
+    }
+
+    public void getJsapiTicket(HttpServletRequest request, HttpServletResponse response) {
+        PrintWriter out = null;
+        Map<String, String> map = null;
+        try {
+            out = response.getWriter();
+
+            String url = request.getParameter("url");
+
+            if (StringUtils.isEmpty(url)) {
+                throw new IllegalArgumentException("url 参数不能为空");
+            }
+
+            // 不包含#及其后面部分
+            url = url.split("#")[0];
+
+            // 获取 jsapi_ticket
+            String ticket = null;
+//            ticket = weChatService.getTicket();
+
+            map = Sign.sign(ticket, url);
+
+        } catch (Exception e) {
+            logger.error("系统异常：{}",e.getMessage());
+        } finally {
+            if (map != null) {
+                out.write(JSON.toJSONString(map));
+            }
+            out.close();
+        }
+
     }
 }

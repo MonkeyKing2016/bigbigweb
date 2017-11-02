@@ -10,6 +10,7 @@ import com.mk.diy.bigbigweb.model.response.TextResponse;
 import com.mk.diy.bigbigweb.test.base.TestBaseConfig;
 import com.mk.diy.bigbigweb.test.model.TestBase;
 import com.mk.diy.bigbigweb.test.model.TestCat;
+import com.mk.diy.bigbigweb.test.model.TestSort;
 import com.mk.diy.bigbigweb.test.util.TestXstreamUtil;
 import com.mk.diy.bigbigweb.utils.AesException;
 import com.mk.diy.bigbigweb.utils.WXBizMsgCrypt;
@@ -31,10 +32,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Base64;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * test
@@ -201,5 +199,24 @@ public class TestUserDaoImpl extends TestBaseConfig{
         System.out.println(toXML);
     }
 
+    @Test
+    public void testList(){
+        TestSort sort1 = new TestSort(1,"1");
+        TestSort sort2 = new TestSort(3,"3");
+        TestSort sort3 = new TestSort(4,"4");
+        TestSort sort4 = new TestSort(2,"2");
+
+        List<TestSort> list = new ArrayList<>();
+        list.add(sort1);
+        list.add(sort2);
+        list.add(sort3);
+        list.add(sort4);
+
+        Collections.sort(list, Comparator.comparingInt(TestSort::getSort));
+
+        for (TestSort testSort : list) {
+            System.out.println(JSON.toJSONString(testSort));
+        }
+    }
 
 }

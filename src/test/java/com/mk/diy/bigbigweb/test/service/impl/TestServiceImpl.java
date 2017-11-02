@@ -12,21 +12,11 @@ import com.mk.diy.bigbigweb.test.base.TestBaseConfig;
 import com.mk.diy.bigbigweb.utils.AesException;
 import com.mk.diy.bigbigweb.utils.HttpsUtil;
 import com.mk.diy.bigbigweb.utils.WechatMenuUtil;
-import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.utils.HttpClientUtils;
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,7 +80,7 @@ public class TestServiceImpl extends TestBaseConfig {
     @Test
     public void postUrl() {
         String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx62a65c24af6c5dbb&secret=66e7b2923e453e6952b8fede46f7b718&code=011W2NMb033gSw11vbQb08JFMb0W2NMV&grant_type=authorization_code";
-        String result = HttpsUtil.get(url, null);
+        String result = HttpsUtil.get(url, null,HttpsUtil.URL_PARAM_DECODECHARSET_UTF8);
         System.out.println(result);
     }
 
